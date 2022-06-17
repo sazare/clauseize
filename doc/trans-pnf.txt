@@ -1,0 +1,18 @@
+手順
+
+プログラムの条件: 手で作るwffと生成されるwffが一致すること
+
+1. ≡ ⇒ の変換。命題と述語 (2022/06/04)
+2. ¬のliteral化。∀⇔∃、∧⇔∨
+3. ∀、∃のprefix化。bound varの扱い・・・
+
+定義
+論理式
+A and B are atom for prop, list for pred
+　(≡ A B)
+　(⇒ A B)
+  (¬ A)
+  ((∀ x) (A X))
+  ((∃ x) (A x))
+
+　

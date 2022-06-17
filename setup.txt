@@ -1,0 +1,7 @@
+
+export MYASD=`pwd`/lisp/clsfy.asd
+(
+cd ~/.common-lisp
+rm -f ~/.common-lisp/clsfy.asd
+ln -s $MYASD .
+)

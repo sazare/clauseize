@@ -1,0 +1,71 @@
+@lisp
+
+ (load "../itos/ito-all.lisp")
+
+cccccc
+参考
+
+∀xと∃xの区別はひつようか
+∀xと(newvar)のペアが必要か
+Q-list: push で左に追加、popで左から削除
+
+(push '(x . a) xxx)
+(push '(x . b) xxx)
+(assoc 'x xxx)
+
+(push '((∀ x) x.12) xxx)
+(assoc '(∀ x) xxx :test #'equal)
+
+(pop xxx)
+
+cccccc
+;; 新しい名前
+
+rubbish-gen-noram.lispから
+(defun genvar (id)
+  (intern (string id))
+)
+
+rubbish-gen.lispから
+(defun genvar (id)
+  (intern (string (gensym id)))
+)
+
+cheaplogic/lisp/rubbish/rubbish-base.lispから
+;; basevar : var.1234.1222 => var
+(defun basevar (v)
+ (subseq (symbol-name v) 0 (position #\. (symbol-name v)))
+)
+;; newvar : v -> v.nnn
+(defun newvjar (v)
+  (intern (string (genvar (basevar v))))
+  (intern (string (genvar (format nil "~a." (basevar v)))))
+)
+
+
+;;;;;;;
+;; rename
+; PとQのxは違う名前になる
+((∀ x)(∨ (P x)((∀ x)(Q x)))) 
+;
+((∀ x)(∨ (P x)((∃ x)(∨ (Q x)(∨ ((∀ x)(R x))(S x))
+
+;; simple one
+;; z = (f x y)
+((∀ x)((∀ y)((∃ z)(P x y z))))
+
+;; z = (f x), w =(g x y) ?
+((∀ x) ((∃ z)((∀ y)((∃ w)(P x y z w)))))
+ 
+;;; skolemize case
+((∀ x)(∨ ((∃ x) (S x)) 
+              ((∀ x) (∨ (R x) 
+                            ((∃ y)(P y))))))
+
+;; rename binding vars
+ ((∀ x)(∨ (S x) 
+               ((∀ x)(∨ (R x)
+                            ((∃ x)(∨ (P x) 
+                                         ((∀ x)(Q x))))))))
+
+
