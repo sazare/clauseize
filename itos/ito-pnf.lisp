@@ -117,10 +117,22 @@
                           '((∀ x.1)(∨ (P x.1)((∀ y.2)(Q y.2))))
                           (rename-bv '((∀ x)(∨ (P x)((∀ y)(Q y))))))
 
+
+;; **** at this point, removed ∃, but wff form keeped
+
 ;; move quantifiers to prefix
-;; final step
-;; make (¬ P) to (-P) or
-;; make (¬ (P x)) to (-P x)
+;; 1) ∧∨ 2 layers
+
+;; 2) remove ∀
+;;;   and add vars to clause
+
+;; 3) literallize
+;; make (¬ P) to (- P) and P to (+ P)
+;; make (¬ (P x)) to (- P x) and (P x) to (+ P x)
+
+
+
+;; assemble all steps into clsfy
 
 )
 
@@ -132,9 +144,10 @@
  ; step2
   (ito-neginto)
   (ito-neginto1)
-
  ; step3
   (ito-quantifier)
+
+ 
 )
 
 (ito-pnf)

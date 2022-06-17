@@ -1,2 +1,5 @@
 # clauseize
-a tool convert wff to clause
+a tool convert wff to clauses.
+
+* an exercise for my programming skill.
+
