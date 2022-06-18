@@ -107,15 +107,11 @@
 
 ;; variable disjoint
   (setq *gensym-counter* 1)
-  (intend-equal "all vars are changed" 
-                          '((∀ x.1)(∨ (P x.1)((∀ y.2)(Q y.2))))
-                          (rename-bv '((∀ x)(∨ (P x)((∀ y)(Q y))))))
+  (intend-equal "all vars are changed" '((∀ x.1)(∨ (P x.1)((∀ y.2)(Q y.2)))) (rename-bv '((∀ x)(∨ (P x)((∀ y)(Q y))))))
 
 ;; skolemize
   (setq *gensym-counter* 1)
-  (intend-equal "all vars are changed" 
-                          '((∀ x.1)(∨ (P x.1)((∀ y.2)(Q y.2))))
-                          (rename-bv '((∀ x)(∨ (P x)((∀ y)(Q y))))))
+  (intend-equal "all vars are changed" '((∀ x.1)(∨ (P x.1)((∀ y.2)(Q y.2)))) (rename-bv '((∀ x)(∨ (P x)((∀ y)(Q y))))))
 
 
 ;; **** at this point, removed ∃, but wff form keeped
@@ -123,14 +119,22 @@
 ;; move quantifiers to prefix
 ;; 1) ∧∨ 2 layers
 
+
+
+
 ;; 2) remove ∀
 ;;;   and add vars to clause
+
+  (setq *gensym-counter* 1)
+  (reset-newsym)
+  (intend-equal "remove ∀" '(∨ (P x)(Q y)) (remove-∀ '((∀ x)(∨ (P x)((∀ y)(Q y))))))
+  (intend-equal "remove ∀" '(∨ (P x y)(∧ (Q x y)(¬ (P x z)))) (remove-∀ '((∀ x)(∨ ((∀ y)(P x y))(∧ ((∀ y)(Q x y))((∀ z)(¬ (P x z))))))))
 
 ;; 3) literallize
 ;; make (¬ P) to (- P) and P to (+ P)
 ;; make (¬ (P x)) to (- P x) and (P x) to (+ P x)
 
-
+; (literalize wff)
 
 ;; assemble all steps into clsfy
 

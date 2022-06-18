@@ -10,8 +10,17 @@
 
 ;; newvar : v -> v.nnn
 ;; for ito, set *gensym-counter* to 0
+(defparameter *varlist* ())
+
+(defun reset-newsym ()
+  (setq *varlist* ())
+)
+
 (defun newsym (v)
-  (intern (string (gensym (format nil "~a." (basevar v)))))
+  (prog ( (ns (intern (string (gensym (format nil "~a." (basevar v)))))))
+    (push ns *varlist*)
+    (return ns)
+  )
 )
 
 

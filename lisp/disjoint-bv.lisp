@@ -42,39 +42,32 @@
   
       ((is-∀ wff) (setq newv (newsym (bvarof wff)))
                   (make-∀ newv (rename-bv (argof wff 1) (cons (cons (bvarof wff) newv) binds))))
-  
       ((is-∃ wff) (setq newv (newsym (bvarof wff)))
                   (rename-bv (argof wff 1) (cons (cons (bvarof wff) (skolemize newv binds)) binds)))
 
-  
       (t (rename-bv-pred wff binds))
     )
   )
 )
 
+(defun remove-∀ (wff)
+  "remove all ∀ quantifier. ∃ may be already removed." 
+    (cond
+      ((is-¬ wff) (make-¬ (remove-∀ (argof wff 1) )))
+      ((is-∨ wff) (make-∨ (remove-∀ (argof wff 1) ) (remove-∀ (argof wff 2) )))
+      ((is-∧ wff) (make-∧ (remove-∀ (argof wff 1) ) (remove-∀ (argof wff 2) )))
+      ((is-∀ wff) (remove-∀ (argof wff 1)))
+      ((is-∃ wff) (remove-∀ (argof wff 1)))
+      (t wff)
+    )
+)
 
+(defun literalize (wff)
+  "¬ appear before atomic, no ∨∧∀∃, and
+   P → (+ P), (P ...) → (+ P ...); (¬ P)→(+ P)、(¬ P ...) → (- P ...)"
 
-;(defun conv-negate  (wff)
-;  "run under keeping a ¬"
-;  (cond
-;    ((is-¬ wff) (conv-neginto (argof wff 1)))
-;    ((is-∨ wff) (make-∧ (conv-negate (argof wff 1))(conv-negate (argof wff 2))))
-;    ((is-∧ wff) (make-∨ (conv-negate (argof wff 1))(conv-negate (argof wff 2))))
-;    ((is-∀ wff) (make-∃ (bvarof wff) (conv-negate (argof wff 1))))
-;    ((is-∃ wff) (make-∀ (bvarof wff) (conv-negate (argof wff 1))))
-;    (t (make-¬ wff))
-;  )
-;)
-;
-;(defun conv-neginto (wff)
-;  "precond: now op is neg, or, and, any, exist only"
-;  (cond
-;    ((is-¬ wff) (conv-negate (argof wff 1)))
-;    ((is-∨ wff) (make-∨ (conv-neginto (argof wff 1))(conv-neginto (argof wff 2))))
-;    ((is-∧ wff) (make-∧ (conv-neginto (argof wff 1))(conv-neginto (argof wff 2))))
-;    ((is-∀ wff) (make-∀ (bvarof wff) (conv-neginto (argof wff 1))))
-;    ((is-∃ wff) (make-∃ (bvarof wff) (conv-neginto (argof wff 1))))
-;    (t wff) 
-;  )
-;)
-;
+    (cond
+      ((is-¬ wff) (cons '- wff))
+      (t (cons '+ wff))
+    )
+)
