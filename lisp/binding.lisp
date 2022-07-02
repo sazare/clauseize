@@ -52,7 +52,7 @@
 
 ;; make a parameter for ∃
 ;; binds : ((x . x.10)(y . y.11)(z . (skf-z.10 x.10 y.11)...)
-(defun get-fullparameters (binds)
+(defun get-skolem-parameters (binds)
   (let (param oparam)
     (loop for b in binds
        when (and (atom (cdr b)) (not (member (car b) oparam) ))
@@ -64,7 +64,7 @@
 )
 
 (defun skolemize (sym binds)
-  (skolem sym (get-fullparameters binds))
+  (skolem sym (get-skolem-parameters binds))
 )
 
 ;; rename var to new in every pred(also not prop)

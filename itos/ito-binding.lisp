@@ -20,11 +20,11 @@
   (intend-equal "put a new on diff sym" '((y . y.1)(x . x.1))  (put-sym-new 'y 'y.1 '((x . x.1))))
 
 ;; make a parameter list from binding
-  (intend-equal "all diff args" '(x.1 y.2 z.3) (get-fullparameters '((x . x.1)(y . y.2)(z . z.3))))
-  (intend-equal "exist var not" '(x.1 z.3) (get-fullparameters '((x . x.1)(y . (f-y.2 x.1))(z . z.3))))
-  (intend-equal "exist var not" '(x.1 z.3) (get-fullparameters '((x . x.1)(z . z.3)(y . (f-y.2 x.1))(z . z.4))))
-  (intend-equal "skip same var" '(x.1 y.2) (get-fullparameters '((x . x.1)(y . y.2)(x . x.3))))
-  (intend-equal "skip same var" '(x.1 y.2) (get-fullparameters '((x . x.1)(y . y.2)(x . x.3)(y . y.4))))
+  (intend-equal "all diff args" '(x.1 y.2 z.3) (get-skolem-parameters '((x . x.1)(y . y.2)(z . z.3))))
+  (intend-equal "exist var not" '(x.1 z.3) (get-skolem-parameters '((x . x.1)(y . (f-y.2 x.1))(z . z.3))))
+  (intend-equal "exist var not" '(x.1 z.3) (get-skolem-parameters '((x . x.1)(z . z.3)(y . (f-y.2 x.1))(z . z.4))))
+  (intend-equal "skip same var" '(x.1 y.2) (get-skolem-parameters '((x . x.1)(y . y.2)(x . x.3))))
+  (intend-equal "skip same var" '(x.1 y.2) (get-skolem-parameters '((x . x.1)(y . y.2)(x . x.3)(y . y.4))))
 
 ;; make binding.
 ; ((∀ x) wff) => (x . new)
