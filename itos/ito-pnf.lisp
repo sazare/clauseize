@@ -219,6 +219,10 @@
 
 ;; quantifiers are removed
 ;; vars came from all ∀ quantifiers
+;; finally 3 types of clauses
+;;; 1. only unit clause L
+;;; 2. only clause      (∨ L1 L2 L3 ...)
+;;; 3. a set of clauses (∧ (∨ L...)(∨ L...)...) ? (∧ L1 (∨ L2 L3 L4)...)??
 
   (setq *gensym-counter* 1)
   (intend-equal "∀" '(∨ (- P x.1 a) (+ Q a x.1)) (clsfy '((∀ x)(⇒ (P x a)(Q a x)))))
@@ -231,6 +235,11 @@
   (setq *gensym-counter* 1)
   (intend-equal "∀in∀and∃" '(∨ (- P x.1 (skf-z.2 x.1)) (+ Q n.3 x.1)) (clsfy '((∀ x)((∃ z)(⇒ (P x z)((∀ n)(Q n x)))))))
   (intend-equal "get vars" '(n.3 x.1) *local-vars*)
+
+  (setq *gensym-counter* 1)
+  (intend-equal "∀ ∨∨" '(∨ (- P x.1 a) (+ Q x.1) (- S x.1) (+ R x.1)) (clsfy '((∀ x)(∨ (¬(P x a))(∨ (∨ (Q x) (¬ (S x)))(R x))))))
+  (intend-equal "get vars" '(x.1) *local-vars*)
+
 )
 
 
