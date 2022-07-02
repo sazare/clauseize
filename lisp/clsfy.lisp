@@ -1,5 +1,28 @@
 ;; pnfy convert wff to clause
 
+(defparameter *local-vars* nil)
+
+(defun reset-vars () 
+  (setf *local-vars* nil)
+)
+
+(defun extract-vars (wff)
+  (cond
+    ((is-¬ wff) (make-¬ (extract-vars (argof wff 1))))
+    ((is-∨ wff) (make-∨ (extract-vars (argof wff 1)) (extract-vars (argof wff 2) )))
+    ((is-∧ wff) (make-∧ (extract-vars (argof wff 1)) (extract-vars (argof wff 2) )))
+
+    ((is-∀ wff) (pushnew (bvarof wff) *local-vars*) (extract-vars (argof wff 1)))
+    ((is-∃ wff) (extract-vars (argof wff 1))) 
+    (t wff)
+  )
+)
+
+
 (defun clsfy (wff)
-  (format t "not yet implemented:wff=~a~%" wff)
+  (let (w)
+    (reset-vars)
+    (setq w (upconj (extract-vars (rename-bv (conv-neginto (conv-imply wff))))))
+    (values w *local-vars*)
+  )
 )

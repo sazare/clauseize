@@ -99,7 +99,6 @@
 (defito ito-quantifier ()
   "quantifier"
 ;; step3
-
   (intend-equal "no quantifire identical" 
            '(v (¬ (P a)) (∨ (∧ (Q b c)(¬ (R a c))) (P b))) 
             (rename-bv '(v (¬ (P a)) (∨ (∧ (Q b c)(¬ (R a c))) (P b))) ))
@@ -113,32 +112,128 @@
   (setq *gensym-counter* 1)
   (intend-equal "all vars are changed" '((∀ x.1)(∨ (P x.1)((∀ y.2)(Q y.2)))) (rename-bv '((∀ x)(∨ (P x)((∀ y)(Q y))))))
 
+)
+
+(defito ito-upconj()
+  "test for upconj"
 
 ;; **** at this point, removed ∃, but wff form keeped
 
 ;; move quantifiers to prefix
-;; 1) ∧∨ 2 layers
-
-
-
-
-;; 2) remove ∀
-;;;   and add vars to clause
+;; 1. remove ∀
+;;;   and add vars to clause at last
 
   (setq *gensym-counter* 1)
   (reset-newsym)
   (intend-equal "remove ∀" '(∨ (P x)(Q y)) (remove-∀ '((∀ x)(∨ (P x)((∀ y)(Q y))))))
   (intend-equal "remove ∀" '(∨ (P x y)(∧ (Q x y)(¬ (P x z)))) (remove-∀ '((∀ x)(∨ ((∀ y)(P x y))(∧ ((∀ y)(Q x y))((∀ z)(¬ (P x z))))))))
 
-;; 3) literallize
+;; literalize
+;; 3 literallize
 ;; make (¬ P) to (- P) and P to (+ P)
 ;; make (¬ (P x)) to (- P x) and (P x) to (+ P x)
 
-; (literalize wff)
+  (intend-equal "¬ to - prop" '(- P) (literalize '(¬ P)))
+  (intend-equal "none to + prop" '(+ P) (literalize 'P))
 
-;; assemble all steps into clsfy
+  (intend-equal "¬ to -" '(- P a b) (literalize '(¬ (P a b))))
+  (intend-equal "none to +" '(+ P a b)(literalize '(P a b)))
+
+;; 2. ∧∨ 2 layers
+;;  → a set of clauses; a list of clauses
+  (intend-equal "just literal pos prop" '(+ P) (upconj 'P))
+  (intend-equal "just literal neg prop" '(- P) (upconj '(¬ P)))
+
+  (intend-equal "just literal pos" '(+ P a) (upconj '(P a)))
+  (intend-equal "just literal neg" '(- P a) (upconj '(¬ (P a))))
+
+  (intend-equal "a ∨ b prop" '(∨(+ P)(- R)) (upconj '(∨ P (¬ R))))
+  (intend-equal "a ∨ b" '(∨(+ P a)(- R a)) (upconj '(∨ (P a) (¬ (R a)))))
+
+  (intend-equal "a ∧ b prop" '(∧(+ P)(- R)) (upconj '(∧ P (¬ R))))
+  (intend-equal "a ∧ b" '(∧(+ P a)(- R a)) (upconj '(∧ (P a) (¬ (R a)))))
+
+  (intend-equal "a ∨ (b ∨ c)  prop" '(∨ (+ P) (- R)(+ Q)) (upconj '(∨ P (∨ (¬ R) Q))))
+  (intend-equal "a ∨ (b ∨ R) " '(∨(+ P a)(- R a)(+ Q a)) (upconj '(∨ (P a) (∨ (¬ (R a))( Q a)))))
+  (intend-equal "(a ∨ b) ∨ c)  prop" '(∨ (+ P)(- R)(+ Q)) (upconj '(∨ (∨ P (¬ R)) Q)))
+  (intend-equal "(a ∨ b) ∨ R) " '(∨(+ P a)(- R a)(+ Q a)) (upconj '(∨ (∨ (P a) (¬ (R a)))(Q a))))
+
+  (intend-equal "a ∧ (b ∧ c)  prop" '(∧ (+ P)(- R)(+ Q)) (upconj '(∧ P (∧ (¬ R) Q))))
+  (intend-equal "a ∧ (b ∧ R) " '(∧ (+ P a)(- R a)(+ Q a)) (upconj '(∧ (P a) (∧ (¬ (R a))( Q a)))))
+  (intend-equal "(a ∧ b) ∧ c)  prop" '(∧ (+ P)(- R)(+ Q)) (upconj '(∧ (∧ P (¬ R)) Q)))
+  (intend-equal "(a ∧ b) ∧ R) " '(∧ (+ P a)(- R a)(+ Q a)) (upconj '(∧ (∧ (P a) (¬ (R a)))(Q a))))
+
+  (intend-equal "(a ∨ b) ∧ c  prop" '(∧ (∨ (+ P)(- R))(+ Q)) (upconj '(∧ (∨ P (¬ R)) Q)))
+  (intend-equal "(a ∨ b) ∧ c "  '(∧ (∨ (+ P a)(- R a))(+ Q a)) (upconj '(∧ (∨ (P a) (¬ (R a)))(Q a))))
+
+  (intend-equal "(a ∨ b) ∧ c)  prop" '(∧ (∨ (+ P) (- R)) (+ Q)) (upconj '(∧ (∨ P (¬ R)) Q)))
+  (intend-equal "(a ∨ b) ∧ R) "  '(∧ (∨ (+ P a) (- R a)) (+ Q a)) (upconj '(∧ (∨ (P a) (¬ (R a)))(Q a))))
+
+  (intend-equal "a ∨ (b ∧ c)  prop" '(∧ (∨(+ P)(- R)) (∨(+ P)(+ Q))) (upconj '(∨ P (∧ (¬ R) Q))))
+  (intend-equal "a ∨ (b ∧ R) "  '(∧ (∨(+ P a)(- R a)) (∨(+ P a)(+ Q a))) (upconj '(∨ (P a) (∧ (¬ (R a))(Q a)))))
+
+  (intend-equal "(a ∧ b) ∨ (c ∧ d)  prop" '(∧ (∨(- P)(- R)) (∨(- P)(+ Q)) (∨(+ S)(- R)) (∨(+ S)(+ Q))) (upconj '(∨ (∧ (¬ P) S) (∧ (¬ R) Q))))
+  (intend-equal "(a ∧ b) ∨ (c ∧ d) "  '(∧ (∨ (+ P a)(- R a)) (∨ (+ P a)(+ Q a)) (∨ (+ S a)(- R a)) (∨ (+ S a)(+ Q a)))  
+                 (upconj '(∨ (∧ (P a) (S a)) (∧ (¬ (R a))(Q a)))))
+
+  (intend-equal "(a v b) ∧ (c v d)  prop" '(∧ (∨ (- P)(+ S))(∨ (- R)(+ Q))) (upconj '(∧ (∨ (¬ P) S) (∨ (¬ R) Q))))
+  (intend-equal "(a ∨ b) ∧ (c ∨ d) " '(∧ (∨ (- P a)(+ S b))(∨(- R a)(+ Q a))) (upconj '(∧ (∨ (¬ (P a)) (S b)) (∨ (¬ (R a)) (Q a)))))
+
+  (intend-equal "(a ∨ b) ∨ (c ∨ d)  prop" '(∨ (- P)(+ S)(- R)(+ Q)) (upconj '(∨ (∨ (¬ P) S) (∨ (¬ R) Q))))
+  (intend-equal "(a ∨ b) ∨ (c ∨ d) " '(∨ (- P a)(+ S b)(- R a)(+ Q a)) (upconj '(∨ (∨ (¬ (P a)) (S b)) (∨ (¬ (R a)) (Q a)))))
+
+  (intend-equal "∧∨∧∨" '(∧(∨ (+ a)(+ c))(∨ (+ a)(+ d))(∨ (- b)(+ c))(∨ (- b)(+ d))(∨ (+ e)(+ f) (+ h))(∨ (+ g)(+ h))) (upconj '(∧ (∨ (∧ a (¬ b))(∧ c d)) (∨ (∧(∨ e f) g) h))))
+
+;; and so on...
+
+
+
+
+;; make vars for every clauses by *varlist* (gensym)
+
+
+;; assemble all staffs into clsfy
 
 )
+
+(defito ito-clsfy ()
+  "ito for clsfy"
+  (intend-equal "P  prop" '(+ P) (clsfy 'P))
+  (intend-equal "-P prop" '(- P) (clsfy '(¬ P)))
+  (intend-equal "(P a)" '(+ P a) (clsfy '(P a)))
+  (intend-equal "(¬ (P a))" '(- P a) (clsfy '(¬ (P a))))
+
+  (intend-equal "double neg (¬(¬ P )) prop" '(+ P a) (clsfy '(¬ (¬ (P a)))))
+  (intend-equal "double neg (¬(¬ (P a))) " '(+ P a) (clsfy '(¬ (¬ (P a)))))
+  (intend-equal "3 neg (¬(¬(¬ P ))) prop" '(- P a) (clsfy '(¬(¬ (¬ (P a))))))
+  (intend-equal "3 neg (¬(¬(¬ (P a)))) " '(- P a) (clsfy '(¬(¬ (¬ (P a))))))
+
+  (intend-equal "imply prop" '(∨ (- P) (+ Q)) (clsfy '(⇒ P Q)))
+  (intend-equal "imply" '(∨ (- P a) (+ Q a)) (clsfy '(⇒ (P a)(Q a))))
+
+  (intend-equal "equiv prop" '(∧ (∨ (- P) (+ Q)) (∨ (+ P)(- Q))) (clsfy '(≡ P Q)))
+  (intend-equal "equiv" '(∧(∨ (- P a) (+ Q a))(∨ (+ P a)(- Q a))) (clsfy '(≡ (P a)(Q a))))
+
+  (intend-equal "equiv prop" '(∧ (∨ (- P) (- Q)) (∨ (+ P)(+ Q))) (clsfy '(≡ P (¬ Q))))
+  (intend-equal "equiv and ¬" '(∧(∨ (+ P a) (+ Q a))(∨ (- P a)(- Q a))) (clsfy '(≡ (¬(P a))(Q a))))
+
+;; quantifiers are removed
+;; vars came from all ∀ quantifiers
+
+  (setq *gensym-counter* 1)
+  (intend-equal "∀" '(∨ (- P x.1 a) (+ Q a x.1)) (clsfy '((∀ x)(⇒ (P x a)(Q a x)))))
+  (intend-equal "get vars" '(x.1) *local-vars*)
+
+  (setq *gensym-counter* 1)
+  (intend-equal "∀∃" '(∨ (- P x.1 (skf-z.2 x.1)) (+ Q (skf-z.2 x.1) x.1)) (clsfy '((∀ x)((∃ z)(⇒ (P x z)(Q z x))))))
+  (intend-equal "get vars" '(x.1) *local-vars*)
+
+  (setq *gensym-counter* 1)
+  (intend-equal "∀in∀and∃" '(∨ (- P x.1 (skf-z.2 x.1)) (+ Q n.3 x.1)) (clsfy '((∀ x)((∃ z)(⇒ (P x z)((∀ n)(Q n x)))))))
+  (intend-equal "get vars" '(n.3 x.1) *local-vars*)
+)
+
+
 
 (defun ito-pnf ()
  ; step1
@@ -150,8 +245,8 @@
   (ito-neginto1)
  ; step3
   (ito-quantifier)
-
- 
+  (ito-upconj)
+  (ito-clsfy) 
 )
 
 (ito-pnf)

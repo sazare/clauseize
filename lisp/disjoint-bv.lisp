@@ -67,7 +67,12 @@
    P → (+ P), (P ...) → (+ P ...); (¬ P)→(+ P)、(¬ P ...) → (- P ...)"
 
     (cond
-      ((is-¬ wff) (cons '- wff))
-      (t (cons '+ wff))
+      ((is-¬ wff) 
+         (cond 
+           ((atom (argof wff 1))  (list '- (argof wff 1)))
+            (t (cons '- (argof wff 1))))
+      )
+      ((atom wff) (list ' + wff))
+      (t  (cons '+ wff))
     )
 )

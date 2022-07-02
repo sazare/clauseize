@@ -2,7 +2,7 @@
 
 
 (myload "ito.lisp")
-(asdf:load-system :pnfy)
+(asdf:load-system :clsfy)
 
 (defito ito-cl1 ()
   "1st sample in Chang&Lee"

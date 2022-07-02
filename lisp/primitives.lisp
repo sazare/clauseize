@@ -34,6 +34,16 @@
   (and (listp wff) (listp (car wff)) (equal '∃ (caar wff)))
 )
 
+;; logical
+
+(defun is-atomic (w)
+  (and (not (is-∨ w))(not (is-∧ w))(not (is-∀ w))(not (is-∃ w)))
+)
+
+(defun is-literal (w)
+  (or (is-atomic w) (is-¬ w))
+)
+
 ;; maparg
 ;(defun map-arg (wff fn)
 ; ; ¬、∀、∃ => (fn (argof wff 1)) => (argof wff 1)
@@ -65,6 +75,9 @@
   (nth n wff)
 )
 
+(defun argsof (wff)
+  (cdr wff)
+)
 
 ;;; make functions
 (defun make-≡ (&rest wffs)
@@ -98,4 +111,13 @@
 (defun make-∃ (v wff)
   (list (list '∃ v) wff)
 )
+
+(defun make-∨* (wffs)
+  (cons '∨ wffs)
+)
+
+(defun make-∧* (wffs)
+  (cons '∧ wffs)
+)
+
 

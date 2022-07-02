@@ -14,6 +14,7 @@
       (:file "disjoint-bv" :depends-on ("package"))
       (:file "imply"       :depends-on ("package"))
       (:file "neginto"     :depends-on ("package"))
+      (:file "upconj"      :depends-on ("package"))
       (:file "clsfy"       :depends-on ("package"))
     )
 )
