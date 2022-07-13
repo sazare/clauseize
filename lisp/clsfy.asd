@@ -16,6 +16,7 @@
       (:file "neginto"     :depends-on ("package"))
       (:file "upconj"      :depends-on ("package"))
       (:file "clsfy"       :depends-on ("package"))
+      (:file "form-kqc"    :depends-on ("package"))
     )
 )
 
