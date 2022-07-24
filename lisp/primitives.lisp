@@ -41,7 +41,7 @@
 )
 
 (defun is-literal (w)
-  (or (is-atomic w) (is-¬ w))
+  (or (eq '- (car w))(eq '+ (car w)))
 )
 
 ;; maparg
@@ -112,6 +112,12 @@
   (list (list '∃ v) wff)
 )
 
+(defun remove-ops (wffs)
+  (loop for w in wffs collect
+    (argsof w)
+  )
+)
+
 (defun make-∨* (wffs)
   (cons '∨ wffs)
 )
@@ -120,4 +126,27 @@
   (cons '∧ wffs)
 )
 
+(defun allop? (op wffs)
+  (loop for w in (argsof wffs) always (eq (opof w) op))
+)
+
+(defun shrink1 (op wffs)
+  (cond
+    ((allop? op wffs) (cons op (loop for w in wffs collect (argsof w))))
+    (t wffs)
+  )
+)
+
+
+(defun ∨in∨ (wff)
+  (and (eq '∨ (opof wff)) (length (argsof wff)) (eq '∨ (opof (argof wff 1))))
+)
+
+(defun shrink∨ (wff)
+ "∨∨ is ∨"
+  (cond
+    ((∨in∨ wff) (argof wff 1))
+    (t wff)
+  )
+)
 

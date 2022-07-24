@@ -6,11 +6,19 @@
   (setf *local-vars* nil)
 )
 
+
+(defun extract-vars* (wffs)
+  (loop for wff in wffs collect
+    (extract-vars wff)
+  )
+)
+
+
 (defun extract-vars (wff)
   (cond
     ((is-¬ wff) (make-¬ (extract-vars (argof wff 1))))
-    ((is-∨ wff) (make-∨ (extract-vars (argof wff 1)) (extract-vars (argof wff 2) )))
-    ((is-∧ wff) (make-∧ (extract-vars (argof wff 1)) (extract-vars (argof wff 2) )))
+    ((is-∨ wff) (make-∨* (extract-vars* (argsof wff))))
+    ((is-∧ wff) (make-∧* (extract-vars* (argsof wff))))
 
     ((is-∀ wff) (pushnew (bvarof wff) *local-vars*) (extract-vars (argof wff 1)))
     ((is-∃ wff) (extract-vars (argof wff 1))) 

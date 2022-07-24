@@ -2,19 +2,24 @@
 
 (myload "ito.lisp")
 (asdf:load-system :clsfy)
-;(asdf:load-system :pnfy)
 
 (defito ito-primitives ()
   "ito of primitives"
 
 ; is?
   (intend-T "is  prop ∧" (is-∧ '(∧ P Q)))
+  (intend-T "is  prop ∧" (is-∧ '(∧ P Q R S)))
+
   (intend-T "is  pred ∧" (is-∧ '(∧ (P x) (Q y))))
+  (intend-T "is  pred ∧" (is-∧ '(∧ (P x) (Q y)(R x)(S x y z))))
+
   (intend-F "is not  pred ∧" (is-∧ '(X (P x) (Q y))))
   (intend-F "is not  pred ∧" (is-∧ '(X P Q)))
 
   (intend-T "is  prop ∨" (is-∨ '(∨ P Q)))
   (intend-T "is  pred ∨" (is-∨ '(∨ (P x)(Q y))))
+
+  (intend-T "is  pred ∨" (is-∨ '(∨ (P x)(Q y)(R x)(S x y z))))
 
   (intend-T "is  prop ≡" (is-≡ '(≡ P Q)))
   (intend-T "is  pred ≡" (is-≡ '(≡ (P x)(Q y))))
