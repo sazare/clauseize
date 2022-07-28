@@ -5,6 +5,6 @@
 
 (load "../itos/ito-pnf.lisp")
 
-;(load "../itos/ito-form-kqc.lisp")
+(load "../itos/ito-form-kqc.lisp")
 
 

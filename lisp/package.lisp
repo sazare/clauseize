@@ -3,7 +3,7 @@
 (defpackage :clsfy
   (:use :cl)
   (:export
-    :clsfy
+    :clausefy
     )
 
  )

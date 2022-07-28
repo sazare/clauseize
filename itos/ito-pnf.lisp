@@ -195,50 +195,47 @@
   (intend-equal "(∧ a -b)" '(∧ (+ a)(- b)) (upconj '(∧ a (¬ b))))
   (intend-equal "(∧(∧ a b))" '(∧ (∧ (+ a)(+ b))) (upconj '(∧ (∧ a b))))
   (intend-equal "(∧(∨ a b))" '(∧ (∨ (+ a)(+ b))) (upconj '(∧ (∨ a b))))
-  (intend-equal "(∧(∨ a b) c d)" '(∧ (∨ (+ a)(+ b))(+ C)(+ D)) (upconj '(∧ (∨ a b) c d)))
+  (intend-equal "(∧(∨ a b) c d)" '(∧ (∨ (+ a)(+ b))(∨ (+ C))(∨ (+ D))) (upconj '(∧ (∨ a b) c d)))
   (intend-equal "(∧(∨ a b)(∨ c d))" '(∧ (∨ (+ a)(+ b))(∨ (+ C)(+ D))) (upconj '(∧ (∨ a b)(∨ c d))))
-  (intend-equal "(∧(∨ a b)(∨ c d) e f)" '(∧ (∨ (+ a)(+ b))(∨ (+ C)(+ D))(+ e)(+ f)) (upconj '(∧ (∨ a b)(∨ c d) e f)))
+  (intend-equal "(∧(∨ a b)(∨ c d) e f)" '(∧ (∨ (+ a)(+ b))(∨ (+ C)(+ D))(∨(+ e))(∨(+ f))) (upconj '(∧ (∨ a b)(∨ c d) e f)))
 
   (intend-equal "(∨ a b)" '(∨ (+ a)(+ b)) (upconj '(∨ a b)))
-  (intend-equal "(∨ (∧ a b))" '(∧ (+ a)(+ b)) (upconj '(∨ (∧ a b))))
-  (intend-equal "(∨ (∧ a -b))" '(∧ (+ a)(- b)) (upconj '(∨ (∧ a (¬ b)))))
-  (intend-equal "(∨ (∨ a b))" '(∨ (+ a)(+ b)) (upconj '(∨ (∨ a b))))
-  (intend-equal "(∨ (∨ a) c d)" '(∨ (+ a)(+ b)(+ c)(+ d)) (upconj '(∨ (∨ a b) c d)))
+  (intend-equal "(∨ (∧ a b))" '(∧ (∨(+ a))(∨(+ b))) (upconj '(∨ (∧ a b))))
+  (intend-equal "(∨ (∧ a -b))" '(∧ (∨(+ a))(∨(- b))) (upconj '(∨ (∧ a (¬ b)))))
+  (intend-equal "(∨ (∨ a b))" '(∨ (∨(+ a)(+ b))) (upconj '(∨ (∨ a b))))
+  (intend-equal "(∨ (∨ a b) c d)" '(∨ (∨(+ a)(+ b))(+ c)(+ d)) (upconj '(∨ (∨ a b) c d)))
   (intend-equal "(∨ (∧ a b) c d)" '(∧ (∨ (+ a)(+ c)(+ d))(∨ (+ b)(+ c)(+ d))) (upconj '(∨ (∧ a b) c d)))
-  (intend-equal "(∨ (∧ a b)(∨ c d))" '(∧ (∨ (+ a)(+ c)(+ d))(∨ (+ b)(+ c)(+ d))) (upconj '(∨ (∧ a b)(∨ c d))))
-  (intend-equal "(∨ (∨ a b)(∨ c d))" '(∨ (+ a)(+ b)(+ c)(+ d)) (upconj '(∨ (∨ a b)(∨ c d))))
-  (intend-equal "(∨ (∧ a b)(∨ c d) e f)" '(∧ (∨ (+ a)(+ c)(+ d)(+ e)(+ f))(∨ (+ b)(+ c)(+ d)(+ e)(+ f))) (upconj '(∨ (∧ a b)(∨ c d) e f)))
+  (intend-equal "(∨ (∧ a b)(∨ c d))" '(∧ (∨ (+ a)(∨(+ c)(+ d)))(∨ (+ b)(∨(+ c)(+ d)))) (upconj '(∨ (∧ a b)(∨ c d))))
+  (intend-equal "(∨ (∨ a b)(∨ c d))" '(∨ (∨(+ a)(+ b))(∨(+ c)(+ d))) (upconj '(∨ (∨ a b)(∨ c d))))
+  (intend-equal "(∨ (∧ a b)(∨ c d) e f)" '(∧ (∨ (+ a)(∨(+ c)(+ d))(+ e)(+ f))(∨ (+ b)(∨(+ c)(+ d))(+ e)(+ f))) (upconj '(∨ (∧ a b)(∨ c d) e f)))
   (intend-equal "(∨ (∧ a b)(∧ c d))" '(∧ (∨ (+ a)(+ c))(∨ (+ a)(+ d))(∨ (+ b)(+ c))(∨ (+ b)(+ d))) (upconj '(∨ (∧ a b)(∧ c d))))
-  (intend-equal "(∨ (∧ a b)(∧ c d)(∨ e f) g h)" '(∧ (∨ (+ a)(+ c)(+ e)(+ f)(+ g)(+ h))(∨ (+ a)(+ d)(+ e)(+ f)(+ g)(+ h))(∨ (+ b)(+ c)(+ e)(+ f)(+ g)(+ h))(∨ (+ b)(+ d)(+ e)(+ f)(+ g)(+ h))) (upconj '(∨ (∧ a b)(∧ c d)(∨ e f) g h)))
+  (intend-equal "(∨ (∧ a b)(∧ c d)(∨ e f) g h)" '(∧ (∨ (+ a)(+ c)(∨(+ e)(+ f))(+ g)(+ h))(∨ (+ a)(+ d)(∨(+ e)(+ f))(+ g)(+ h))(∨ (+ b)(+ c)(∨(+ e)(+ f))(+ g)(+ h))(∨ (+ b)(+ d)(∨(+ e)(+ f))(+ g)(+ h))) (upconj '(∨ (∧ a b)(∧ c d)(∨ e f) g h)))
 
   (intend-equal "(a ∧ b) ∨ (c ∧ d) "  '(∧ (∨ (+ P a)(- R a)) (∨ (+ P a)(+ Q a)) (∨ (+ S a)(- R a)) (∨ (+ S a)(+ Q a)))  
                  (upconj '(∨ (∧ (P a) (S a)) (∧ (¬ (R a))(Q a)))))
 
-  (intend-equal "a ∧ (b ∧ c)  prop" '(∧(- R)(+ Q)(+ P)) (upconj '(∧ P (∧ (¬ R) Q))))
+  (intend-equal "a ∧ (b ∧ c)  prop" '(∧ (- R)(+ Q)(+ P)) (upconj '(∧ P (∧ (¬ R) Q))))
   (intend-equal "a ∧ (b ∧ R) " '(∧ (- R a)(+ Q a)(+ P a)) (upconj '(∧ (P a) (∧ (¬ (R a))( Q a)))))
 
-  (intend-equal "((a ∧ b) ∧ c)  prop" '(∧ (- R)(+ Q)(+ P)) (upconj '(∧ (∧ P (¬ R)) Q)))
-  (intend-equal "((a ∧ b) ∧ R) " '(∧ (- R a)(+ Q a)(+ P a)) (upconj '(∧ (∧ (P a) (¬ (R a)))(Q a))))
+  (intend-equal "((a ∧ b) ∧ c)  prop" '(∧ (+ P)(- R)(+ Q)) (upconj '(∧ (∧ P (¬ R)) Q)))
+  (intend-equal "((a ∧ b) ∧ R) " '(∧ (+ P a)(- R a)(+ Q a)) (upconj '(∧ (∧ (P a) (¬ (R a)))(Q a))))
 
-  (intend-equal "(a ∨ b) ∧ c  prop" '(∧ (- R)(+ Q)(+ P)) (upconj '(∧ (∨ P (¬ R)) Q)))
-  (intend-equal "(a ∨ b) ∧ c "  '(∧ (∨ (- R a)(+ Q a)(+ P a))) (upconj '(∧ (∨ (P a) (¬ (R a)))(Q a))))
+  (intend-equal "(a ∨ b) ∧ c  prop" '(∧ (∨(+ P)(- R))(∨ (+ Q))) (upconj '(∧ (∨ P (¬ R)) Q)))
+  (intend-equal "(a ∨ b) ∧ c "      '(∧ (∨ (+ P a) (- R a))(∨(+ Q a))) (upconj '(∧ (∨ (P a) (¬ (R a)))(Q a))))
 
-  (intend-equal "((a ∨ b) ∧ c) prop" '(∧ (∨ (+ P) (- R)) (+ Q)) (upconj '(∧ (∨ P (¬ R)) Q)))
-  (intend-equal "((a ∨ b) ∧ R) pred"  '(∧ (∨ (- R a) (+ Q a)(+ P a))) (upconj '(∧ (∨ (P a) (¬ (R a)))(Q a))))
-
-  (intend-equal "a ∨ (b ∧ c)  prop" '(∧ (- R) (+ Q)(+ P)) (upconj '(∨ P (∧ (¬ R) Q))))
-  (intend-equal "a ∨ (b ∧ R) "  '(∧ (- R a)(+ P a)(+ Q a)) (upconj '(∨ (P a) (∧ (¬ (R a))(Q a)))))
+  (intend-equal "a ∨ (b ∧ c)  prop" '(∧ (∨(- R) (+ P))(∨ (+ Q)(+ P))) (upconj '(∨ P (∧ (¬ R) Q))))
+  (intend-equal "a ∨ (b ∧ R) "  '(∧ (∨(- R a)(+ P a))(∨(+ Q a)(+ P a))) (upconj '(∨ (P a) (∧ (¬ (R a))(Q a)))))
 
 ;  (intend-equal "∧∨∧∨ deep" '(∧(∨ (+ a)(+ c))(∨ (+ a)(+ d))(∨ (- b)(+ c))(∨ (- b)(+ d))(∨ (+ e)(+ f) (+ h))(∨ (+ g)(+ h))) (upconj '(∧ (∨ (∧ a (¬ b))(∧ c d)) (∨ (∧(∨ e f) g) h))))
 
 ;  (intend-equal "full pattern" '(∧ (∨ (+ P) (+ R) (+ A) (+ B) (+ C) (+ D) (+ E) (+ F)) (∨ (+ P) (+ S) (+ A) (+ B) (+ C) (+ D) (+ E) (+ F)) (∨ (+ Q) (+ R) (+ A) (+ B) (+ C) (+ D) (+ E) (+ F)) (∨ (+ Q) (+ S) (+ A) (+ B) (+ C) (+ D) (+ E) (+ F))) (upconj '(∨ (∧ P Q)(∧ R S)(∨ A B)(∨ C D) E F)))
 
-  (intend-equal "a ∨ (b ∨ R) " '(∨ (+ P a)(- R a)(+ Q a)) (upconj '(∨ (P a) (¬ (R a))(Q a))))
   (intend-equal "a ∨ b" '(∨ (+ P a)(- R a)) (upconj '(∨ (P a) (¬ (R a))))) 
-  (intend-equal "a ∨ (b ∨ R) " '(∨(+ P a)(- R a)(+ Q a)) (upconj '(∨ (P a) (∨ (¬ (R a))( Q a)))))
-  (intend-equal "(a ∨ b) ∨ R " '(∨(+ P a)(- R a)(+ Q a)) (upconj '(∨ (∨ (P a) (¬ (R a)))(Q a))))
+  (intend-equal "(a ∨ b ∨ R) " '(∨ (+ P a)(- R a)(+ Q a)) (upconj '(∨ (P a) (¬ (R a))(Q a))))
+  (intend-equal "(a ∨ (b ∨ R) " '(∨ (∨ (- R a)(+ Q a))(+ P a)) (upconj '(∨ (P a) (∨ (¬ (R a))( Q a)))))
+  (intend-equal "(a ∨ b) ∨ R " '(∨ (∨ (+ P a)(- R a))(+ Q a)) (upconj '(∨ (∨ (P a) (¬ (R a)))(Q a))))
   (intend-equal "(a ∨ b) ∧ (c ∨ d) " '(∧ (∨ (- P a)(+ S b))(∨(- R a)(+ Q a))) (upconj '(∧ (∨ (¬ (P a)) (S b)) (∨ (¬ (R a)) (Q a)))))
-  (intend-equal "(a ∨ b) ∨ (c ∨ d) " '(∨ (- P a)(+ S b)(- R a)(+ Q a)) (upconj '(∨ (∨ (¬ (P a)) (S b)) (∨ (¬ (R a)) (Q a)))))
+  (intend-equal "(a ∨ b) ∨ (c ∨ d) " '(∨ (∨ (- P a)(+ S b))(∨(- R a)(+ Q a))) (upconj '(∨ (∨ (¬ (P a)) (S b)) (∨ (¬ (R a)) (Q a)))))
 )
 
 (defito ito-clsfy ()
@@ -258,6 +255,7 @@
 
   (intend-equal "equiv prop" '(∧ (∨ (- P) (+ Q)) (∨ (+ P)(- Q))) (clsfy '(≡ P Q)))
   (intend-equal "equiv" '(∧(∨ (- P a) (+ Q a))(∨ (+ P a)(- Q a))) (clsfy '(≡ (P a)(Q a))))
+
 
   (intend-equal "equiv prop" '(∧ (∨ (- P) (- Q)) (∨ (+ P)(+ Q))) (clsfy '(≡ P (¬ Q))))
   (intend-equal "equiv and ¬" '(∧(∨ (+ P a) (+ Q a))(∨ (- P a)(- Q a))) (clsfy '(≡ (¬(P a))(Q a))))
