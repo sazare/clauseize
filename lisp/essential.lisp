@@ -41,6 +41,29 @@
     )
   )
 )
+;;
+
+(defun wff2kqc (wffname note kqcname)
+  (let (wffs)
+    (setq wffs (readafile wffname))
+    (with-open-file (out kqcname
+                      :direction :output
+                      :if-exists :supersede)
+      (format out ";~a @ ~a~%" wffname note)
+  
+      (loop for wff in wffs collect
+        (let ((kqc (clausefy wff)))
+          (format out ";~a~%" wff)
+          (loop for sexp in kqc do
+            (format out "~a~%~%" sexp)
+            (format t "~a~%" sexp)
+          )
+        )
+      )
+      T
+    )
+  ) 
+)
 
 ; initial setup for this, 
 ; :wname : cname -> wffname
@@ -55,5 +78,4 @@
 (defun wffof (name)
   (get name :wff)
 )
-
 
