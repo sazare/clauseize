@@ -28,18 +28,3 @@
   (list '¬ a)
 )
 
-;(defmacro ¬ (a) 
-;  `(¬ ,a)
-;)
-
-;(defmacro ¬ (a)
-;  `(cond 
-;    ((listp ,a)
-;      (cond 
-;        ((eq '¬ (car ,a)) (car ,a))
-;        (t ,a)
-;      ))
-;    (t ,a)
-;  )
-;)
-;

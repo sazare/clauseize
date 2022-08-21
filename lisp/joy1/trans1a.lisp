@@ -21,8 +21,35 @@
 
 ;; ¬¬a => aは、変換に違う名前をつけたほうがよい。
 (defun ¬ (a)
-  `(¬ ,a)
+  `(- ,a)
 )
+
+(defparameter *conn* '(¬ ∨ ∧ ∀ ∃ ⇒ ≡))
+
+(defun literal? (a)
+  (cond
+    ((atom a) t)
+    ((member (car a) *conn*) nil)
+    (t t)
+  )
+)
+
+(defun ¬inner* (as)
+  (loop for a in as collect
+    (¬inner* a)
+  )
+)
+
+;;; this is idiot
+(defun ¬inner (a)
+  (cond 
+    ((literal? a) `(¬ ,a))
+    ((eq '¬ (car a)) (¬inner* (cdr a)))
+    (t (list(car a) (¬inner (cadr a))))
+  )
+)
+
+    
 
 ;; changed ∀∃ expression form
 ;; (∀ x (P x y)) => ((x1) (P x1 y))
