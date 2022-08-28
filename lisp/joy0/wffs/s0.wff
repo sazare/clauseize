@@ -1,0 +1,11 @@
+;; multi wff in a file
+
+;; wff1
+(⇒ ((∀ x)((∃ z)(∧ (P x)(Q x z)))) ((∀ y)((∃ z)(∨ (S y)(W y z)))))
+
+;; wff2
+(≡ ((∀ x)((∃ z)(∧ (P x)(Q x z)))) ((∀ y)((∃ z)(∨ (S y)(W y z)))))
+
+;; wff3
+((∀ z)(∧ (S z a)(S z b)))
+

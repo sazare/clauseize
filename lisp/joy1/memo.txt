@@ -45,5 +45,43 @@ steps
 
 
 
+xxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxx
+無理
+
+macro をインターフェース、計算をfunctionでやるというのはspecial formたとえばsetq などはできるが
+
+論理記号についてはマクロや関数に定義をかえられるが、それ以外のatomicについてはキーとなる記号がないので場合訳の関数が必要になる。
+(isatomic E)など
+
+すると、定義にcondを書くしかない。
+
+macroに場合分けを書くか。
+
+マクロfをinterfaceとしてそれに対応する機能をfjと名前をつけてみた。jは虚数単位。
+何も解決しない。
+
+
+macroを繰り返し適用したい。
+(⇒ (⇒ p q) (⇒ r s))
+を展開したいと思ったとき、macroだけでは一番上の⇒しか展開されない。(たぶん)
+そこで⇒jを定義してみたりしたが、展開が無限loopするしかないようだ。
+
+(defmacro ∧ (a b)
+  `(cnj ',a ',b)
+)
+
+という書き方をするとspecial formがかける。
+(defmacro mysetq (a b) `(set ',a ,b))
+(defmacro ∧ (a b) `(∧  ,a ,b)) ; dont stop
+
+↓ ' stop the evaluation loop
+' を使うのは、引数に渡したS式が全体として式であり、実行する対象ではないことを示す。
+しかし、'のせいで表現の再帰的な評価(たとえば(⇒ (⇒ p q) r)で、内側の⇒が評価されない)
+
+(defmacro ∧ (a b) `(list '∧ ',a ',b))
+
+
+
+
 
 
