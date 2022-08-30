@@ -1,8 +1,17 @@
+;;; macro and function
 
+(defmacro aa (x y) `(list ,x ,y))
+(defun aaf (x y) `(list ,x ,y))
+
+
+;;; eval
 (defmacro ev (f a) `(,f ,a))
 
 ;(defmacro eev (e) `((car ,e)(cdr ,e)))
 (defmacro eev (e) `(,(car e),(cdr e)))
+
+;;; setq
+(defmacro mysetq (v e) `(set ',v ,e))
 
 
 ;; logic

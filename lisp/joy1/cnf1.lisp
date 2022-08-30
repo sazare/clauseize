@@ -1,20 +1,5 @@
 ; 1st step of cnf tran
 
-;; def for symbols
-;; for these defs, ',a needless. and the recursive application is effective.
-
-(defvar x 'x)
-(defvar y 'y)
-(defvar a 'a)
-(defvar b 'b)
-(defvar c 'c)
-
-(defvar p 'p)
-(defvar q 'q)
-(defvar r 'r)
-(defvar s 's)
-
-
 ;;
 (defun ∧ (a b)
   `(∧ ,a ,b)
@@ -28,10 +13,13 @@
   `(¬ ,a)
 )
 
+;  (∀ x (Pp x)) ok not (∀ (x y) (pp xy))
+(defun ∀ (vs e) `(∀ ,vs ,e))
+;(defun ∀ (vs e) `(∀ ,vs ,e))
 
-;(defmacro ≡ (a b)
-;  `(∧ (∨ (¬ ,a) ,b)(∨ ,a (¬ ,b)))
-;)
+
+(defun ∃ (vs e) `(∃ ,vs ,e))
+;(defun ∃ (vs e) `(∃ ,vs ,e))
 
 (defmacro ≡ (a b)
   `(∧ (⇒ ,a ,b) (⇒ ,b ,a))
@@ -43,18 +31,13 @@
 
 
 ;; macro dont recursive applied?
-;; but don't use ' and symbol's value is itself, seems allright
+;; while prop or pred are defined identical one, work.
 
-(⇒ (⇒ p q) r)
-
-;CL-USER(2): (⇒ (⇒ p q) r)
+;(⇒ (⇒ p q) r)
 ;
-;(∨ (¬ (⇒ P Q)) R)
-;CL-USER(3): (≡ (≡ p q) r)
+;(≡ (⇒ p q)(⇒ (pp a)(qq b)))
 ;
-;(∧ (∨ (¬ (≡ P Q)) R) (∨ (≡ P Q) (¬ R)))
-
-;; alternative question
-;;; how to write recursive in macro? can i?
-
+;(∀ x (pp x))
+;
+;(∀ (x y) (∧ (pp x)(qq y)))
 
